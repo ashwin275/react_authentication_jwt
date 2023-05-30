@@ -1,7 +1,18 @@
 import React from 'react'
 import './navbar.css'
 import { Link } from 'react-router-dom'
+
+import { Navigate } from 'react-router-dom'
 function Navbar() {
+
+  const handleLogout = ()=>{
+    localStorage.clear();
+    <Navigate to ="/login"/>
+
+  }
+  const token = localStorage.getItem('token')
+
+
   return (
 
 
@@ -32,6 +43,7 @@ function Navbar() {
       <li className="nav-item">
 
         <a className="nav-link" href="#">Home</a>
+
         
       </li>
     </ul>
@@ -44,7 +56,10 @@ function Navbar() {
 
     <Link to='/login'><button type="button" className="btn btn-secondary  px-3 me-2">Login</button></Link>
     <Link to='/signup'><button type="button" className="btn btn-secondary  px-3 me-2">Signup</button></Link>
-    <Link to='/login'><button type="button" className="btn btn-secondary  px-3 me-2">Logut</button></Link>
+
+
+    <Link to='/login'><button onClick={handleLogout} type="button" className="btn btn-secondary  px-3 me-2">Logout</button></Link>
+  
 
 
       

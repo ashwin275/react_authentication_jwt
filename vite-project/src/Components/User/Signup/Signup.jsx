@@ -2,7 +2,8 @@
 import React ,{useState}from 'react'
 import './Signup.css'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate ,Link} from 'react-router-dom'
+
 function Signup() {
   const navigate = useNavigate();
   const [name,setName] = useState('')
@@ -77,7 +78,7 @@ function Signup() {
                     <button className="btn btn-primary btn-block mb-4" >Sign in</button>
 
                     <div className="text-center">
-                      <p>Already have an account <a href="#!">Login</a></p>
+                      <p>Already have an account <Link to='/login'>Login</Link></p>
                     </div>
                     </div>
             </form>
