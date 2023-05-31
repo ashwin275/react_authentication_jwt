@@ -1,15 +1,31 @@
 import React from 'react'
 import './navbar.css'
-import { Link } from 'react-router-dom'
-
+import { Link, useNavigate } from 'react-router-dom'
+import { NavDropdown ,Badge} from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../../slice/authSlice';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 import { Navigate } from 'react-router-dom'
 function Navbar() {
 
-  const handleLogout = ()=>{
-    localStorage.clear();
-    <Navigate to ="/login"/>
+  const {userInfo} = useSelector((state) => state.auth)
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  }
+  const logoutHandler = async () => {
+    try {
+      const res = await axios.post('http://127.0.0.1:8000/api/logout/');
+      console.log(res.data.message)
+      toast.success(res.data.message)
+      
+      dispatch(logout());
+      navigate('/login');
+    } catch (err) {
+      console.error(err);
+    }
+  };
   const token = localStorage.getItem('token')
 
 
@@ -50,15 +66,23 @@ function Navbar() {
 
 
     <div className="d-flex align-items-center">
+   
+   {userInfo? <NavDropdown title={userInfo.username} id='username'>
+    <LinkContainer to='/profile'>
+      <NavDropdown.Item>Profile</NavDropdown.Item>
+    </LinkContainer>
 
+    <NavDropdown.Item onClick={logoutHandler}>Logout</NavDropdown.Item>
+
+   </NavDropdown>  :
+    (<><Link to='/login'><button type="button" className="btn btn-secondary  px-3 me-2">Login</button></Link>
+    <Link to='/signup'><button type="button" className="btn btn-secondary  px-3 me-2">Signup</button></Link></>)
+
+}
        
 
 
-    <Link to='/login'><button type="button" className="btn btn-secondary  px-3 me-2">Login</button></Link>
-    <Link to='/signup'><button type="button" className="btn btn-secondary  px-3 me-2">Signup</button></Link>
-
-
-    <Link to='/login'><button onClick={handleLogout} type="button" className="btn btn-secondary  px-3 me-2">Logout</button></Link>
+    
   
 
 

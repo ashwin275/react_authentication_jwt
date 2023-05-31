@@ -1,15 +1,25 @@
 
-import React ,{useState}from 'react'
+import React ,{useState,useEffect}from 'react'
 import './Signup.css'
 import axios from 'axios'
 import { useNavigate ,Link} from 'react-router-dom'
+import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
 
 function Signup() {
   const navigate = useNavigate();
+  const {userInfo} = useSelector((state)=>state.auth)
   const [name,setName] = useState('')
   const [email,setEmail] = useState('')
   const [password,setPassword] = useState('')
   const [error,setError] = useState('')
+
+    useEffect(()=>{
+
+    if(userInfo){
+      navigate('/home')
+    }
+  },[userInfo,navigate]);
 
 
 
@@ -30,6 +40,7 @@ function Signup() {
      }catch(error){
       if (error.response){
        
+        toast.error(error.response.data.email[0])
         setError(error.response.data.email[0])
        
       }else if(error.request){

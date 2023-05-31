@@ -1,13 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import { useNavigate ,Link} from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 
 import axios from 'axios';
-
+import { setCredentials } from '../../slice/authSlice';
+import { toast } from 'react-toastify';
 
 function Login() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+ 
+  const {userInfo} = useSelector((state)=>state.auth)
+
+  console.log(userInfo)
+   useEffect(()=>{
+
+    if (userInfo){
+      navigate('/home');
+    }
+  },[userInfo,navigate]);
 
 
   const handleSubmit = async (e) => {
@@ -23,16 +37,19 @@ function Login() {
         withCredentials: true
       });
 
-      const { message, jwt } = response.data;
+      const { userInfo, jwt } = response.data;
 
-      console.log(jwt);
-      localStorage.clear();
-      localStorage.setItem('token', jwt);
+      console.log(userInfo.username);
+
+      dispatch(setCredentials({ userInfo,jwt }));
      
-      navigate('/home', { replace: true });
+      navigate('/');
+      toast.success(`Welcome ${userInfo.username}`)
+      
     } catch (error) {
       if (error.response) {
-        console.log(error.response.data);
+        console.log(error.response.data.detail)
+        toast.error(error.response.data.detail);
       }
     }
   };

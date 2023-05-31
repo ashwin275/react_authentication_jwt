@@ -3,11 +3,11 @@ import axios from 'axios';
 
 function Home() {
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const jwtToken = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')).jwt : null;
     const fetchData = async () => {
       try {
        
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
         const response = await axios.get('http://127.0.0.1:8000/api/userview/');
         console.log(response.data);
       } catch (error) {

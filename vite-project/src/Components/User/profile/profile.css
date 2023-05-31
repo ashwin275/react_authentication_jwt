@@ -1,0 +1,11 @@
+.customdiv{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+    margin-top: 2rem;
+}
+
+.heading{
+    margin-top: 50px;
+}
