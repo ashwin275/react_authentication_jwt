@@ -2,11 +2,12 @@ import React, { useState ,useEffect} from 'react';
 import { useNavigate ,Link} from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import axios from 'axios';
+
+import instance from '../../../../axios';
 import { setCredentials } from '../../slice/authSlice';
 import { toast } from 'react-toastify';
 
-function Login() {
+function Login(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [email, setEmail] = useState('');
@@ -14,8 +15,6 @@ function Login() {
 
  
   const {userInfo} = useSelector((state)=>state.auth)
-
-  console.log(userInfo)
    useEffect(()=>{
 
     if (userInfo){
@@ -33,18 +32,23 @@ function Login() {
     };
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/login/', userData, {
+      const response = await instance.post('/login/', userData, {
         withCredentials: true
       });
 
       const { userInfo, jwt } = response.data;
 
-      console.log(userInfo.username);
+      console.log(userInfo,'///////////');
 
       dispatch(setCredentials({ userInfo,jwt }));
      
       navigate('/');
-      toast.success(`Welcome ${userInfo.username}`)
+      if(userInfo.is_superuser == false){
+        toast.success(`Welcome ${userInfo.username}`)
+      }else{
+        toast.success("Welcome Admin")
+      }
+      
       
     } catch (error) {
       if (error.response) {
@@ -58,7 +62,8 @@ function Login() {
     <div>
       <form onSubmit={handleSubmit}>
         <div className="loginParentDiv p-5 parentDiv">
-          <h2>LOGIN</h2>
+         
+          <h2  style={{ fontFamily:" IM FELL Great Primer SC" }}>{props.title} SIGNIN</h2>
           <div className="form-outline mb-4 mt-5">
             <input type="email" className="form-control" onChange={(e) => setEmail(e.target.value)} />
             <label className="form-label">Email address</label>

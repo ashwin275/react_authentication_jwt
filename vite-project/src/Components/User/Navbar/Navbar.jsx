@@ -5,9 +5,9 @@ import { NavDropdown ,Badge} from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../../slice/authSlice';
-import axios from 'axios';
+import instance from '../../../../axios';
 import { toast } from 'react-toastify';
-import { Navigate } from 'react-router-dom'
+// import { Navigate } from 'react-router-dom'
 function Navbar() {
 
   const {userInfo} = useSelector((state) => state.auth)
@@ -16,8 +16,8 @@ function Navbar() {
 
   const logoutHandler = async () => {
     try {
-      const res = await axios.post('http://127.0.0.1:8000/api/logout/');
-      console.log(res.data.message)
+      const res = await instance.post('/logout/');
+    
       toast.success(res.data.message)
       
       dispatch(logout());
@@ -68,9 +68,23 @@ function Navbar() {
     <div className="d-flex align-items-center">
    
    {userInfo? <NavDropdown title={userInfo.username} id='username'>
-    <LinkContainer to='/profile'>
-      <NavDropdown.Item>Profile</NavDropdown.Item>
-    </LinkContainer>
+
+  {
+    userInfo.is_superuser?
+
+  null
+    
+    :
+    
+    (<LinkContainer to='/profile'>
+       <NavDropdown.Item>Profile</NavDropdown.Item>
+     </LinkContainer>)
+   
+    
+
+  }
+
+    
 
     <NavDropdown.Item onClick={logoutHandler}>Logout</NavDropdown.Item>
 

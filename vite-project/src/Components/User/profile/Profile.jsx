@@ -4,7 +4,7 @@ import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import instance from "../../../../axios";
 
 function Profile() {
   const { userInfo } = useSelector((state) => state.auth);
@@ -21,10 +21,10 @@ function Profile() {
       ? JSON.parse(localStorage.getItem("userInfo")).jwt
       : null;
 
-    axios.defaults.headers.common["Authorization"] = `Bearer ${jwtToken}`;
+    instance.defaults.headers.common["Authorization"] = `Bearer ${jwtToken}`;
 
-    axios.get("http://127.0.0.1:8000/api/userview/").then((res) => {
-      console.log(res.data);
+    instance.get("/userview/").then((res) => {
+    
       setUserName(res.data.username);
       setEmail(res.data.email);
       setImage(res.data.profile);
@@ -33,7 +33,7 @@ function Profile() {
 
   return (
     <div>
-      <h2 className="heading">User Profile</h2>
+      <h2 className="heading"  style={{ fontFamily:" IM FELL Great Primer SC" }}>User Profile</h2>
 
       <div className="customdiv">
         <Card style={{ width: "18rem" }}>

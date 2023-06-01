@@ -2,6 +2,7 @@
 import React ,{useState,useEffect}from 'react'
 import './Signup.css'
 import axios from 'axios'
+import instance from '../../../../axios'
 import { useNavigate ,Link} from 'react-router-dom'
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
@@ -33,11 +34,12 @@ function Signup() {
      }
 
      try{
-      const response = await axios.post('http://127.0.0.1:8000/api/register/',userData);
+      const response = await instance.post('/register/',userData);
           console.log(response.data)
           navigate('/login')
 
      }catch(error){
+      
       if (error.response){
        
         toast.error(error.response.data.email[0])
@@ -68,7 +70,7 @@ function Signup() {
                   <div className="loginParentDiv p-5 parentDiv">
                       <h2>SignUp</h2>
                      
-                    {error}
+                    
                       <div className="form-outline mb-4 mt-5 ">
                       <input type="text" className="form-control"  onChange={(e)=>setName(e.target.value)}/>
                       <label className="form-label">Username</label>
